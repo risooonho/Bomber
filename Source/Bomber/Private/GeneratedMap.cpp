@@ -9,8 +9,8 @@
 #include "MyGameInstance.h"
 #include "MyGameModeBase.h"
 #include "SingletonLibrary.h"
+#include "MyCameraActor.h"
 //---
-#include "Components/StaticMeshComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -25,6 +25,9 @@ AGeneratedMap::AGeneratedMap()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.TickInterval = 0.25F;
+
+	// Default camera class
+	CameraActorClass = AMyCameraActor::StaticClass();
 
 #if WITH_EDITOR	 //[Editor]
 	// Should not call OnConstruction on drag events
@@ -401,10 +404,11 @@ void AGeneratedMap::Tick(float DeltaTime)
 	}
 
 	// AI moving
+	// @TODO #2 stop broadcasting and replace it to the tick of AI.
 	USingletonLibrary::GOnAIUpdatedDelegate.Broadcast();
 
 	// Random item spawning
-	// @todo GameMode is null for client, redesign this logic!
+	// @TODO #1 GameMode is null for client, redesign this logic!
 	AMyGameModeBase* MyGameModeBase = USingletonLibrary::GetMyGameMode(this);
 	if (ensureMsgf(MyGameModeBase, TEXT("AGeneratedMap::Tick: MyGameModeBase is null")))
 	{
@@ -524,6 +528,19 @@ void AGeneratedMap::PostInitializeComponents()
 		}
 
 		RerunConstructionScripts();
+	}
+}
+
+// Called when the game starts or when spawned
+void AGeneratedMap::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Camera spawning
+	UWorld* World = GetWorld();
+	if (World && World->GetName() == USingletonLibrary::GetMainLevelName()) // is main level
+	{
+		World->SpawnActor(CameraActorClass);
 	}
 }
 
