@@ -9,7 +9,7 @@
 #include "SingletonLibrary.generated.h"
 
 /**
- * 	The static functions library  
+ * 	The static functions library
  */
 UCLASS(Blueprintable, BlueprintType)
 class BOMBER_API USingletonLibrary final : public UBlueprintFunctionLibrary
@@ -79,7 +79,7 @@ public:
 	static class AGeneratedMap* GetLevelMap();
 
 	/** The Level Map setter. If the specified Level Map is not valid or is transient, find and set another one
-	 * 
+	 *
 	 * @param LevelMap The level map to set in the Library
 	 */
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -101,6 +101,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "C++")
 	static FString GetMainLevelName();
 
+	/** Returns number of characters in the array. */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "C++")
+    static int32 GetCharactersNum();
+
 	/* ---------------------------------------------------
 	 *		FCell blueprint functions
 	 * --------------------------------------------------- */
@@ -120,7 +124,7 @@ public:
 	}
 
 	/** Rotation of the input vector around the center of the Level Map to the same yaw degree
-	 * 
+	 *
 	 * @param Cell The cell, that will be rotated
 	 * @param AxisZ The Z param of the axis to rotate around
 	 * @return Rotated to the Level Map cell

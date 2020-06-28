@@ -163,7 +163,9 @@ void AGeneratedMap::GetSidesCells(
 AActor* AGeneratedMap::SpawnActorByType(const EActorType& Type, const FCell& Cell)
 {
 	UWorld* World = GetWorld();
-	if (!World || ContainsMapComponents(Cell, TO_FLAG(~EActorType::Player)) // the free cell was not found
+	if (!World
+		|| !HasAuthority()
+		|| ContainsMapComponents(Cell, TO_FLAG(~EActorType::Player)) // the free cell was not found
 	    || Type == EActorType::None)                                        // nothing to spawn
 	{
 		return nullptr;
@@ -413,7 +415,7 @@ void AGeneratedMap::Tick(float DeltaTime)
 
 	// Random item spawning
 	// @TODO #1 GameMode is null for client, redesign this logic!
-	AMyGameModeBase* MyGameModeBase = USingletonLibrary::GetMyGameMode(this);
+	/*AMyGameModeBase* MyGameModeBase = USingletonLibrary::GetMyGameMode(this);
 	if (ensureMsgf(MyGameModeBase, TEXT("AGeneratedMap::Tick: MyGameModeBase is null")))
 	{
 		const float Timer = MyGameModeBase->Timer;
@@ -425,7 +427,7 @@ void AGeneratedMap::Tick(float DeltaTime)
 			const FCell RandCell = *GridCells_[FMath::RandRange(int32(0), GridCells_.Num() - 1)];
 			SpawnActorByType(EActorType::Item, RandCell); // can be not spawned in non empty cell
 		}
-	}
+	}*/
 }
 
 // Called when an instance of this class is placed (in editor) or spawned
@@ -553,6 +555,7 @@ void AGeneratedMap::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ThisClass, MapComponents_);
+	DOREPLIFETIME(ThisClass, PlayerCharactersNum);
 }
 
 // Spawns and fills the Grid Array values by level actors
@@ -774,4 +777,4 @@ void AGeneratedMap::Destroyed()
 	}
 	Super::Destroyed();
 }
-#endif	// [Editor] Destroyed
+#endif

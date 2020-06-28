@@ -296,6 +296,13 @@ void AMyAIController::OnConstruction(const FTransform& Transform)
 void AMyAIController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
 }
 
 // Allows the PlayerController to set up custom input bindings

@@ -149,7 +149,7 @@ protected:
 	int32 BoxesChance_ = 70; //[AW]
 
 	/** Number of characters on the Level Map. */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Replicated, Category = "C++", meta = (BlueprintProtected))
 	int32 PlayerCharactersNum = 0; //[G]
 
 	/** The class of the camera actor. */

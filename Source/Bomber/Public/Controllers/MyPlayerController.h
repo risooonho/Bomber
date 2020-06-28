@@ -21,4 +21,7 @@ public:
 protected:
 	/** Allows the PlayerController to set up custom input bindings. */
 	virtual void SetupInputComponent() override;
+
+	/** Called when the game starts or when spawned */
+	virtual void BeginPlay() override;
 };

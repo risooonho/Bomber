@@ -18,7 +18,7 @@ AMyCameraActor::AMyCameraActor()
 	// Set defaults to the CameraComponent
 	GetCameraComponent()->SetRelativeLocation(FVector(0.F, 0.F, 500.F));
 	GetCameraComponent()->SetRelativeRotation(FRotator(-90.0F, 0.0F, -90.0F));
-	GetCameraComponent()->SetConstraintAspectRatio(false);	// viewport without black borders
+	GetCameraComponent()->SetConstraintAspectRatio(false); // viewport without black borders
 }
 
 // Called every frame
@@ -27,7 +27,8 @@ void AMyCameraActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	const AGeneratedMap* const LevelMap = USingletonLibrary::GetLevelMap();
-	if (IsValid(LevelMap) == false || LevelMap->GetCharactersNum() == 0)
+	if (!LevelMap // the map isn't valid
+		|| USingletonLibrary::GetCharactersNum() == 0) // no players
 	{
 		SetActorTickEnabled(false);
 		return;

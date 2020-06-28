@@ -57,7 +57,7 @@ void USingletonLibrary::PrintToLog(const UObject* UObj, const FString& FunctionN
 {
 #if WITH_EDITOR	 // [Editor]
 	AGeneratedMap* const LevelMap = GetLevelMap();
-	if (!LevelMap || LevelMap->bShouldShowRenders)	// The Level Map is not accessible or has the debug mode
+	if (!LevelMap || LevelMap->bShouldShowRenders) // The Level Map is not accessible or has the debug mode
 	{
 		UE_LOG(LogTemp, Warning, TEXT("\t %s \t %s \t %s"), (UObj ? *UObj->GetName() : TEXT("nullptr")), *FunctionName, *Message);
 	}
@@ -69,7 +69,7 @@ void USingletonLibrary::ClearOwnerTextRenders(AActor* Owner)
 {
 #if WITH_EDITOR	 // [Editor]
 
-	if (IS_VALID(Owner) == false)  // The owner is not valid
+	if (IS_VALID(Owner) == false) // The owner is not valid
 	{
 		return;
 	}
@@ -81,7 +81,7 @@ void USingletonLibrary::ClearOwnerTextRenders(AActor* Owner)
 		for (int32 i = TextRendersArray.Num() - 1; i >= 0; --i)
 		{
 			FString StringIt = Cast<UTextRenderComponent>(TextRendersArray[i])->Text.ToString();
-			if (StringIt != "Player" && StringIt != "AI")  // is not nickname
+			if (StringIt != "Player" && StringIt != "AI") // is not nickname
 			{
 				TextRendersArray[i]->DestroyComponent();
 			}
@@ -107,9 +107,9 @@ void USingletonLibrary::AddDebugTextRenders_Implementation(
 {
 #if WITH_EDITOR	 // [Editor]
 
-	if (Cells.Num() == NULL			  // Null length
-		|| !IS_VALID(Owner)			  // Owner is not valid
-		|| !IS_VALID(GetLevelMap()))  // The Level Map is not valid
+	if (Cells.Num() == NULL          // Null length
+	    || !IS_VALID(Owner)          // Owner is not valid
+	    || !IS_VALID(GetLevelMap())) // The Level Map is not valid
 	{
 		return;
 	}
@@ -167,10 +167,10 @@ AGeneratedMap* USingletonLibrary::GetLevelMap()
 
 #if WITH_EDITOR	 // [IsEditorNotPieWorld]
 
-	if (IsEditorNotPieWorld() == true			  // IsEditorNotPieWorld only
-		&& !GetSingleton()->LevelMap_.IsValid())  // Is transient
+	if (IsEditorNotPieWorld() == true            // IsEditorNotPieWorld only
+	    && !GetSingleton()->LevelMap_.IsValid()) // Is transient
 	{
-		SetLevelMap(nullptr);  // Find the Level Map
+		SetLevelMap(nullptr); // Find the Level Map
 	}
 #endif	// WITH_EDITOR [IsEditorNotPieWorld]
 
@@ -182,8 +182,8 @@ void USingletonLibrary::SetLevelMap(const AGeneratedMap* LevelMap)
 {
 #if WITH_EDITOR	 // [IsEditorNotPieWorld]
 
-	if (IsEditorNotPieWorld()  // IsEditorNotPieWorld only
-		&& LevelMap == nullptr)
+	if (IsEditorNotPieWorld() // IsEditorNotPieWorld only
+	    && LevelMap == nullptr)
 	{
 		UWorld* EditorWorld = GEditor->GetEditorWorldContext().World();
 		if (EditorWorld)
@@ -221,8 +221,8 @@ AMyGameModeBase* USingletonLibrary::GetMyGameMode(const UObject* WorldContextObj
 FString USingletonLibrary::GetMenuLevelName()
 {
 	USingletonLibrary* SingletonLibrary = GetSingleton();
-	if (SingletonLibrary  //
-		&& !SingletonLibrary->MenuLevelAsset_.IsNull())
+	if (SingletonLibrary //
+	    && !SingletonLibrary->MenuLevelAsset_.IsNull())
 	{
 		return SingletonLibrary->MenuLevelAsset_.GetAssetName();
 	}
@@ -235,14 +235,24 @@ FString USingletonLibrary::GetMenuLevelName()
 FString USingletonLibrary::GetMainLevelName()
 {
 	USingletonLibrary* SingletonLibrary = GetSingleton();
-	if (SingletonLibrary  //
-		&& !SingletonLibrary->MainLevelAsset_.IsNull())
+	if (SingletonLibrary //
+	    && !SingletonLibrary->MainLevelAsset_.IsNull())
 	{
 		return SingletonLibrary->MainLevelAsset_.GetAssetName();
 	}
 
 	ensure("USingletonLibrary::GetMainLevelName: The Map is not choosen.");
 	return "";
+}
+
+int32 USingletonLibrary::GetCharactersNum()
+{
+	const AGeneratedMap* const LevelMap = USingletonLibrary::GetLevelMap();
+	if (IS_VALID(LevelMap))
+	{
+		return LevelMap->GetCharactersNum();
+	}
+	return 0;
 }
 
 /* ---------------------------------------------------

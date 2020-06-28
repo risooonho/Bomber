@@ -35,3 +35,16 @@ void AMyPlayerController::SetupInputComponent()
 	});
 	InputComponent->AddActionBinding(EscapeWasPressedLambda);
 }
+
+// Called when the game starts or when spawned
+void AMyPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
+}
