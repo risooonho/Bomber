@@ -92,13 +92,13 @@ void ABombActor::InitializeBombProperties(
 	// Update explosion information
 	USingletonLibrary::GetLevelMap()->GetSidesCells(ExplosionCells_, MapComponent->GetCell(), EPathType::Explosion, FireN);
 
-	//#if WITH_EDITOR  // [Editor]
-	//	if (MapComponent->bShouldShowRenders)
-	//	{
-	//		USingletonLibrary::PrintToLog(this, "[Editor]InitializeBombProperties", "-> \t AddDebugTextRenders");
-	//		USingletonLibrary::AddDebugTextRenders(this, ExplosionCells_, FLinearColor::Red);
-	//	}
-	//#endif
+	/*#if WITH_EDITOR  // [Editor]
+		if (MapComponent->bShouldShowRenders)
+		{
+			USingletonLibrary::PrintToLog(this, "[Editor]InitializeBombProperties", "-> \t AddDebugTextRenders");
+			USingletonLibrary::AddDebugTextRenders(this, ExplosionCells_, FLinearColor::Red);
+		}
+	#endif*/
 }
 
 // Called when an instance of this class is placed (in editor) or spawned.
@@ -130,6 +130,12 @@ void ABombActor::OnConstruction(const FTransform& Transform)
 void ABombActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+	}
 
 	// Binding to the event, that triggered when the actor has been explicitly destroyed
 	OnDestroyed.AddDynamic(this, &ABombActor::OnBombDestroyed);

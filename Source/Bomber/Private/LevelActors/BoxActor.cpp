@@ -53,6 +53,12 @@ void ABoxActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+	}
+
 	// Binding to the event, that triggered when the actor has been explicitly destroyed
 	OnDestroyed.AddDynamic(this, &ABoxActor::OnBoxDestroyed);
 }

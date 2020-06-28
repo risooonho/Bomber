@@ -51,7 +51,12 @@ void AWallActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Binding to the event, that triggered when the actor has been explicitly destroyed
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+	}
 
+	// Binding to the event, that triggered when the actor has been explicitly destroyed
 	OnDestroyed.AddDynamic(this, &AWallActor::OnWallDestroyed);
 }

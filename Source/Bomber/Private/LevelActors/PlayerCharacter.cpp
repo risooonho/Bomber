@@ -118,6 +118,13 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
+
 	// Set the animation
 	if (GetMesh()->GetAnimInstance() == nullptr	 // Is not created yet
 		&& MyAnimClass != nullptr)				 // The animation class is set

@@ -11,6 +11,7 @@
 #include "SingletonLibrary.h"
 #include "MyCameraActor.h"
 //---
+#include "UnrealNetwork.h"
 #include "Math/UnrealMathUtility.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -25,6 +26,9 @@ AGeneratedMap::AGeneratedMap()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.TickInterval = 0.25F;
+
+	// setup replication
+	bReplicates = true;
 
 	// Default camera class
 	CameraActorClass = AMyCameraActor::StaticClass();
@@ -542,6 +546,13 @@ void AGeneratedMap::BeginPlay()
 	{
 		World->SpawnActor(CameraActorClass);
 	}
+}
+
+void AGeneratedMap::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ThisClass, MapComponents_);
 }
 
 // Spawns and fills the Grid Array values by level actors

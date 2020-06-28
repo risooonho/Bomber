@@ -76,7 +76,14 @@ void AItemActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	this->OnActorBeginOverlap.AddDynamic(this, &AItemActor::OnItemBeginOverlap);
+	// Setup replication
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+	}
+
+	// Bind collision overlapping
+	OnActorBeginOverlap.AddDynamic(this, &AItemActor::OnItemBeginOverlap);
 }
 
 // Increases +1 to numbers of character's powerups (Skate/Bomb/Fire)

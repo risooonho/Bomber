@@ -23,11 +23,11 @@ public:
 	 * --------------------------------------------------- *
 	/** The blueprint background actor  */
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "C++")
-	UChildActorComponent* BackgroundBlueprintComponent;	 //[C.DO]
+	UChildActorComponent* BackgroundBlueprintComponent; //[C.DO]
 
 	/** The blueprint class with the background, collision cage and floor. Can be changed in the editor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "C++")
-	TSubclassOf<AActor> BackgroundBlueprintClass;  //[B]
+	TSubclassOf<AActor> BackgroundBlueprintClass; //[B]
 
 #if WITH_EDITORONLY_DATA  // bShouldShowRenders
 	/** Mark the editor updating visualization(text renders) */
@@ -134,27 +134,27 @@ protected:
 	 * --------------------------------------------------- *
 
 	/** Cells storage. */
-	TArray<FSharedCell> GridCells_;	 //[M.IO]
+	TArray<FSharedCell> GridCells_; //[M.IO]
 
 	/** Storage of alive players and their current locations */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected))
-	TArray<class UMapComponent*> MapComponents_;  //[M.IO]
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Replicated, Category = "C++", meta = (BlueprintProtected))
+	TArray<class UMapComponent*> MapComponents_; //[M.IO]
 
 	/** The chance of walls generation. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, ClampMin = "0", ClampMax = "100"))
-	int32 WallsChance_ = 35;  //[AW]
+	int32 WallsChance_ = 35; //[AW]
 
 	/** The chance of boxes generation. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, ClampMin = "0", ClampMax = "100"))
-	int32 BoxesChance_ = 70;  //[AW]
+	int32 BoxesChance_ = 70; //[AW]
 
 	/** Number of characters on the Level Map. */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected))
-	int32 PlayerCharactersNum = 0;	//[G]
+	int32 PlayerCharactersNum = 0; //[G]
 
 	/** The class of the camera actor. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "C++")
-    TSubclassOf<AActor> CameraActorClass;  //[B]
+	TSubclassOf<AActor> CameraActorClass; //[B]
 
 	/* ---------------------------------------------------
 	 *		Protected functions
@@ -172,6 +172,9 @@ protected:
 
 	/** Called when the game starts or when spawned */
 	virtual void BeginPlay() override;
+
+	/** Returns properties that are replicated for the lifetime of the actor channel */
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	/** Spawns and fills the Grid Array values by level actors */
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "C++", meta = (BlueprintProtected))
